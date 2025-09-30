@@ -85,30 +85,31 @@ export default function DashboardPage() {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       {/* Header */}
       <header className="border-b border-slate-700/50 bg-slate-900/50 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold">
+        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+          <div className="flex items-center space-x-2 md:space-x-3">
+            <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-sm md:text-base">
               L
             </div>
             <div>
-              <h1 className="text-xl font-bold text-white">Luganodes</h1>
-              <p className="text-xs text-slate-400">Staking Dashboard</p>
+              <h1 className="text-base md:text-xl font-bold text-white">Luganodes</h1>
+              <p className="text-xs text-slate-400 hidden sm:block">Staking Dashboard</p>
             </div>
           </div>
           <Button
             onClick={handleLogout}
             variant="outline"
+            size="sm"
             className="border-slate-700 text-slate-300 hover:bg-slate-800"
           >
-            <LogOut className="w-4 h-4 mr-2" />
-            Logout
+            <LogOut className="w-4 h-4 md:mr-2" />
+            <span className="hidden md:inline">Logout</span>
           </Button>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-4 md:py-8">
         {/* Overview Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-6 md:mb-8">
           <Card className="bg-slate-900/90 border-slate-700">
             <CardHeader className="pb-2">
               <CardDescription className="text-slate-400">Total Staked Value</CardDescription>
@@ -116,15 +117,15 @@ export default function DashboardPage() {
             <CardContent>
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="text-3xl font-bold text-white">
+                  <div className="text-2xl md:text-3xl font-bold text-white">
                     ${overview?.total_staked_value?.toLocaleString()}
                   </div>
-                  <div className={`flex items-center mt-2 text-sm ${overview?.performance_change_24h >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                    {overview?.performance_change_24h >= 0 ? <TrendingUp className="w-4 h-4 mr-1" /> : <TrendingDown className="w-4 h-4 mr-1" />}
+                  <div className={`flex items-center mt-2 text-xs md:text-sm ${overview?.performance_change_24h >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                    {overview?.performance_change_24h >= 0 ? <TrendingUp className="w-3 h-3 md:w-4 md:h-4 mr-1" /> : <TrendingDown className="w-3 h-3 md:w-4 md:h-4 mr-1" />}
                     {Math.abs(overview?.performance_change_24h || 0).toFixed(2)}% (24h)
                   </div>
                 </div>
-                <DollarSign className="w-12 h-12 text-purple-400 opacity-50" />
+                <DollarSign className="w-10 h-10 md:w-12 md:h-12 text-purple-400 opacity-50" />
               </div>
             </CardContent>
           </Card>
@@ -136,12 +137,12 @@ export default function DashboardPage() {
             <CardContent>
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="text-3xl font-bold text-green-400">
+                  <div className="text-2xl md:text-3xl font-bold text-green-400">
                     ${overview?.total_rewards_earned?.toLocaleString()}
                   </div>
-                  <div className="text-sm text-slate-400 mt-2">All time</div>
+                  <div className="text-xs md:text-sm text-slate-400 mt-2">All time</div>
                 </div>
-                <Award className="w-12 h-12 text-green-400 opacity-50" />
+                <Award className="w-10 h-10 md:w-12 md:h-12 text-green-400 opacity-50" />
               </div>
             </CardContent>
           </Card>
@@ -153,12 +154,12 @@ export default function DashboardPage() {
             <CardContent>
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="text-3xl font-bold text-blue-400">
+                  <div className="text-2xl md:text-3xl font-bold text-blue-400">
                     {overview?.average_apy?.toFixed(2)}%
                   </div>
-                  <div className="text-sm text-slate-400 mt-2">Across all assets</div>
+                  <div className="text-xs md:text-sm text-slate-400 mt-2">Across all assets</div>
                 </div>
-                <Activity className="w-12 h-12 text-blue-400 opacity-50" />
+                <Activity className="w-10 h-10 md:w-12 md:h-12 text-blue-400 opacity-50" />
               </div>
             </CardContent>
           </Card>
@@ -170,31 +171,31 @@ export default function DashboardPage() {
             <CardContent>
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="text-3xl font-bold text-purple-400">
+                  <div className="text-2xl md:text-3xl font-bold text-purple-400">
                     {overview?.total_assets}
                   </div>
-                  <div className="text-sm text-slate-400 mt-2">Active stakes</div>
+                  <div className="text-xs md:text-sm text-slate-400 mt-2">Active stakes</div>
                 </div>
-                <Filter className="w-12 h-12 text-purple-400 opacity-50" />
+                <Filter className="w-10 h-10 md:w-12 md:h-12 text-purple-400 opacity-50" />
               </div>
             </CardContent>
           </Card>
         </div>
 
         {/* Date Range Filter */}
-        <Card className="bg-slate-900/90 border-slate-700 mb-8">
+        <Card className="bg-slate-900/90 border-slate-700 mb-6 md:mb-8">
           <CardHeader>
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
               <div>
-                <CardTitle className="text-white flex items-center">
-                  <Calendar className="w-5 h-5 mr-2 text-purple-400" />
+                <CardTitle className="text-white flex items-center text-base md:text-lg">
+                  <Calendar className="w-4 h-4 md:w-5 md:h-5 mr-2 text-purple-400" />
                   Date Range Filter
                 </CardTitle>
-                <CardDescription className="text-slate-400 mt-1">
+                <CardDescription className="text-slate-400 mt-1 text-xs md:text-sm">
                   Showing data for the last {dateRange[0]} days
                 </CardDescription>
               </div>
-              <Badge variant="outline" className="bg-purple-500/20 text-purple-300 border-purple-500/50">
+              <Badge variant="outline" className="bg-purple-500/20 text-purple-300 border-purple-500/50 w-fit">
                 {dateRange[0]} Days
               </Badge>
             </div>
@@ -210,27 +211,27 @@ export default function DashboardPage() {
                 className="w-full"
               />
               <div className="flex justify-between text-xs text-slate-500">
-                <span>7 days</span>
-                <span>30 days</span>
-                <span>60 days</span>
-                <span>90 days</span>
+                <span>7d</span>
+                <span className="hidden sm:inline">30d</span>
+                <span className="hidden sm:inline">60d</span>
+                <span>90d</span>
               </div>
             </div>
           </CardContent>
         </Card>
 
         {/* Charts Row */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">
           {/* Performance Chart */}
           <Card className="bg-slate-900/90 border-slate-700">
-            <CardHeader>
-              <CardTitle className="text-white">Portfolio Performance</CardTitle>
-              <CardDescription className="text-slate-400">
+            <CardHeader className="pb-3 md:pb-6">
+              <CardTitle className="text-white text-base md:text-lg">Portfolio Performance</CardTitle>
+              <CardDescription className="text-slate-400 text-xs md:text-sm">
                 Total value over time
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
+              <ResponsiveContainer width="100%" height={250}>
                 <AreaChart data={performance}>
                   <defs>
                     <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
@@ -271,14 +272,14 @@ export default function DashboardPage() {
 
           {/* Rewards History Chart */}
           <Card className="bg-slate-900/90 border-slate-700">
-            <CardHeader>
-              <CardTitle className="text-white">Rewards History</CardTitle>
-              <CardDescription className="text-slate-400">
+            <CardHeader className="pb-3 md:pb-6">
+              <CardTitle className="text-white text-base md:text-lg">Rewards History</CardTitle>
+              <CardDescription className="text-slate-400 text-xs md:text-sm">
                 Daily rewards earned
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
+              <ResponsiveContainer width="100%" height={250}>
                 <BarChart data={rewardsHistory}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
                   <XAxis
@@ -308,46 +309,46 @@ export default function DashboardPage() {
         {/* Assets List */}
         <Card className="bg-slate-900/90 border-slate-700">
           <CardHeader>
-            <CardTitle className="text-white">Staked Assets</CardTitle>
-            <CardDescription className="text-slate-400">
+            <CardTitle className="text-white text-base md:text-lg">Staked Assets</CardTitle>
+            <CardDescription className="text-slate-400 text-xs md:text-sm">
               Your active staking positions
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
+            <div className="space-y-3 md:space-y-4">
               {filteredAssets.map((asset) => (
                 <div
                   key={asset.id}
-                  className="flex items-center justify-between p-4 rounded-lg bg-slate-800/50 border border-slate-700 hover:border-purple-500/50 transition-colors"
+                  className="flex flex-col md:flex-row md:items-center md:justify-between p-3 md:p-4 rounded-lg bg-slate-800/50 border border-slate-700 hover:border-purple-500/50 transition-colors gap-3"
                 >
-                  <div className="flex items-center space-x-4">
+                  <div className="flex items-center space-x-3 md:space-x-4">
                     <img
                       src={asset.logo_url}
                       alt={asset.asset_name}
-                      className="w-12 h-12 rounded-full"
+                      className="w-10 h-10 md:w-12 md:h-12 rounded-full flex-shrink-0"
                     />
                     <div>
-                      <div className="font-semibold text-white">{asset.asset_name}</div>
-                      <div className="text-sm text-slate-400">{asset.asset_symbol}</div>
+                      <div className="font-semibold text-white text-sm md:text-base">{asset.asset_name}</div>
+                      <div className="text-xs md:text-sm text-slate-400">{asset.asset_symbol}</div>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-4 gap-8 text-right">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-8 text-left md:text-right">
                     <div>
                       <div className="text-xs text-slate-400">Amount Staked</div>
-                      <div className="font-semibold text-white">{asset.amount_staked.toFixed(2)} {asset.asset_symbol}</div>
+                      <div className="font-semibold text-white text-sm md:text-base">{asset.amount_staked.toFixed(2)} {asset.asset_symbol}</div>
                     </div>
                     <div>
                       <div className="text-xs text-slate-400">Current Value</div>
-                      <div className="font-semibold text-white">${asset.current_value.toLocaleString()}</div>
+                      <div className="font-semibold text-white text-sm md:text-base">${asset.current_value.toLocaleString()}</div>
                     </div>
                     <div>
                       <div className="text-xs text-slate-400">APY</div>
-                      <div className="font-semibold text-blue-400">{asset.apy.toFixed(2)}%</div>
+                      <div className="font-semibold text-blue-400 text-sm md:text-base">{asset.apy.toFixed(2)}%</div>
                     </div>
                     <div>
                       <div className="text-xs text-slate-400">Rewards Earned</div>
-                      <div className="font-semibold text-green-400">${asset.rewards_earned.toFixed(2)}</div>
+                      <div className="font-semibold text-green-400 text-sm md:text-base">${asset.rewards_earned.toFixed(2)}</div>
                     </div>
                   </div>
                 </div>
