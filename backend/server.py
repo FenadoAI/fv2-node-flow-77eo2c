@@ -451,6 +451,52 @@ async def login(credentials: UserLogin, request: Request):
         return AuthResponse(success=False, error=str(exc))
 
 
+async def _scrape_real_staking_data(request: Request) -> List[dict]:
+    """Scrape real staking data using web search MCP."""
+    try:
+        search_agent = await _get_or_create_agent(request, "search")
+
+        # Search for current staking information
+        search_prompt = """Search for current cryptocurrency staking rates and information for these assets: Ethereum (ETH), Polkadot (DOT), Cardano (ADA), Solana (SOL), and Cosmos (ATOM).
+
+        For each asset, provide:
+        1. Current APY/APR for staking
+        2. Current price in USD
+
+        Format your response as JSON with this structure:
+        {
+            "ETH": {"apy": X.XX, "price": XXXX.XX},
+            "DOT": {"apy": X.XX, "price": XX.XX},
+            ...
+        }
+        """
+
+        result = await search_agent.execute(search_prompt, use_tools=True)
+
+        if not result.success:
+            logger.warning(f"Failed to scrape staking data: {result.error}")
+            return []
+
+        # Parse the response to extract staking data
+        import json
+        try:
+            # Try to extract JSON from the response
+            response_text = result.content
+            # Find JSON in the response
+            start_idx = response_text.find('{')
+            end_idx = response_text.rfind('}') + 1
+            if start_idx >= 0 and end_idx > start_idx:
+                data = json.loads(response_text[start_idx:end_idx])
+                return data
+        except Exception as e:
+            logger.warning(f"Failed to parse staking data JSON: {e}")
+
+        return {}
+    except Exception as e:
+        logger.exception("Error scraping staking data")
+        return {}
+
+
 # Staking Endpoints
 @api_router.get("/staking/overview")
 async def get_staking_overview(request: Request):
@@ -458,8 +504,20 @@ async def get_staking_overview(request: Request):
         user = _get_user_from_token(request)
         db = _ensure_db(request)
 
-        # Generate or fetch staking data
+        # Try to get real data, fallback to mock
+        real_data = await _scrape_real_staking_data(request)
+
+        # Generate staking positions using real or mock data
         staking_data = _generate_mock_staking_data(user["user_id"])
+
+        # Update with real data if available
+        if real_data:
+            for asset in staking_data:
+                symbol = asset["asset_symbol"]
+                if symbol in real_data:
+                    asset["apy"] = real_data[symbol].get("apy", asset["apy"])
+                    price = real_data[symbol].get("price", asset["current_value"] / asset["amount_staked"])
+                    asset["current_value"] = round(asset["amount_staked"] * price, 2)
 
         # Calculate overview
         total_staked = sum(asset["current_value"] for asset in staking_data)
@@ -491,8 +549,20 @@ async def get_staking_assets(request: Request):
     try:
         user = _get_user_from_token(request)
 
+        # Try to get real data
+        real_data = await _scrape_real_staking_data(request)
+
         # Generate mock staking data
         staking_data = _generate_mock_staking_data(user["user_id"])
+
+        # Update with real data if available
+        if real_data:
+            for asset in staking_data:
+                symbol = asset["asset_symbol"]
+                if symbol in real_data:
+                    asset["apy"] = real_data[symbol].get("apy", asset["apy"])
+                    price = real_data[symbol].get("price", asset["current_value"] / asset["amount_staked"])
+                    asset["current_value"] = round(asset["amount_staked"] * price, 2)
 
         return {
             "success": True,

@@ -76,7 +76,10 @@ export default function DashboardPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
-        <div className="text-white text-xl">Loading dashboard...</div>
+        <div className="text-center">
+          <div className="text-white text-xl mb-2">Loading real-time staking data...</div>
+          <div className="text-slate-400 text-sm">Fetching live APY rates and prices</div>
+        </div>
       </div>
     );
   }
